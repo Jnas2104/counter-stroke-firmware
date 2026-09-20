@@ -11,7 +11,7 @@
 
     default_layout: default_layout {
         compatible = "zmk,physical-layout";
-        display-name = "TT-Zaehler";
+        display-name = "CounterStroke";
         transform = <&default_transform>;
         kscan = <&kscan0>;
         keys
