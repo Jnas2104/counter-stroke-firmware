@@ -1,6 +1,6 @@
 # counter-stroke-firmware
 
-ZMK-Firmware für die Bluetooth-Tastenbox des [Tischtennis-Zählers](https://github.com/Jonas-Heidrich/counter-stroke):
+ZMK-Firmware für die Bluetooth-Tastenbox des [Tischtennis-Zählers](https://github.com/Jnas2104/counter-stroke):
 nRF52840 „Pro Micro“/SuperMini (nice!nano-v2-kompatibel), zwei Taster gegen GND.
 
 | Taster | Pad | sendet |

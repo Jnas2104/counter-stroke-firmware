@@ -2,7 +2,7 @@ file_format: "1"
 id: tt_zaehler
 name: TT-Zaehler
 type: shield
-url: https://github.com/Jonas-Heidrich/counter-stroke
+url: https://github.com/Jnas2104/counter-stroke
 requires: [pro_micro]
 features:
   - keys
