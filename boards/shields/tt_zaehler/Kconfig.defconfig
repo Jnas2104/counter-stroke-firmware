@@ -1,0 +1,6 @@
+if SHIELD_TT_ZAEHLER
+
+config ZMK_KEYBOARD_NAME
+    default "TT-Zaehler"
+
+endif

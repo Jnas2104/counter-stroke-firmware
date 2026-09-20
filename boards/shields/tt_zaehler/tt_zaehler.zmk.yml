@@ -1,0 +1,8 @@
+file_format: "1"
+id: tt_zaehler
+name: TT-Zaehler
+type: shield
+url: https://github.com/Jonas-Heidrich/counter-stroke
+requires: [pro_micro]
+features:
+  - keys

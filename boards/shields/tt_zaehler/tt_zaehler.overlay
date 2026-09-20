@@ -1,0 +1,40 @@
+// Zwei Taster direkt an GPIO, gegen GND. Pad-Aufdruck auf dem SuperMini nRF52840:
+//   Taster links  -> "017" (P0.17, pro_micro D2)
+//   Taster rechts -> "020" (P0.20, pro_micro D3)
+#include <dt-bindings/zmk/matrix_transform.h>
+#include <physical_layouts.dtsi>
+
+/ {
+    chosen {
+        zmk,physical-layout = &default_layout;
+    };
+
+    default_layout: default_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "TT-Zaehler";
+        transform = <&default_transform>;
+        kscan = <&kscan0>;
+        keys
+            = <&key_physical_attrs 100 100   0 0 0 0 0>
+            , <&key_physical_attrs 100 100 100 0 0 0 0>
+            ;
+    };
+
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        columns = <2>;
+        rows = <1>;
+        map = <RC(0,0) RC(0,1)>;
+    };
+
+    kscan0: kscan0 {
+        compatible = "zmk,kscan-gpio-direct";
+        wakeup-source;
+        debounce-press-ms = <10>;   // Metalltaster prellen länger als Tastaturschalter
+        debounce-release-ms = <30>;
+        input-gpios
+            = <&pro_micro 2 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            , <&pro_micro 3 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            ;
+    };
+};

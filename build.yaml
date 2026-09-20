@@ -1,0 +1,6 @@
+# Zwei Firmwares: der Zähler selbst und "settings_reset" zum Löschen der Bluetooth-Kopplung.
+include:
+  - board: nice_nano_v2
+    shield: tt_zaehler
+  - board: nice_nano_v2
+    shield: settings_reset
