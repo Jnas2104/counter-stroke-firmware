@@ -1,6 +1,8 @@
 // Linker Taster = Pfeil links, rechter Taster = Pfeil rechts – die Standardtasten der App.
 // Beide Taster zugleich: kurz = Neustart in der App (beide Pfeile), 5 s halten = Bluetooth-Kopplung
 // löschen, damit sich ein anderes Handy verbinden kann (ZMK lehnt sonst jedes zweite Gerät ab).
+// Beide Taster 3× drücken und beim dritten Mal 3 s halten = Update-Modus: per USB am Rechner
+// erscheint das Laufwerk NICENANO, .uf2 draufziehen. Kein Reset-Taster nötig, Gehäuse bleibt zu.
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
@@ -25,6 +27,22 @@
             tapping-term-ms = <5000>;
             bindings = <&bt>, <&beide>;
         };
+
+        update_lang: update_lang {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <3000>;
+            bindings = <&bootloader>, <&beide>;
+        };
+
+        // Der Neustart (kurz beide) kommt dadurch 300 ms später – wartet auf weitere Drücke.
+        beide_tanz: beide_tanz {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <300>;
+            bindings = <&beide_lang BT_CLR 0>, <&beide>, <&update_lang 0 0>;
+        };
     };
 
     combos {
@@ -32,7 +50,7 @@
         entkoppeln {
             key-positions = <0 1>;
             timeout-ms = <40>; // so lange wartet ein einzelner Druck auf den zweiten Taster
-            bindings = <&beide_lang BT_CLR 0>;
+            bindings = <&beide_tanz>;
         };
     };
 
