@@ -1,11 +1,9 @@
 // Linker Taster = Pfeil links, rechter Taster = Pfeil rechts – die Standardtasten der App.
-// Beide Taster zugleich: kurz = Neustart in der App (beide Pfeile), 3 s halten = Wartungsmodus.
-// Im Wartungsmodus:
-//   linker Taster  = Update-Modus (vorher per USB an den Rechner, dann erscheint das Laufwerk
-//                    NICENANO, .uf2 draufziehen; ohne USB startet die Box nach 3 s normal neu)
-//   rechter Taster = Bluetooth-Kopplung löschen, damit sich ein anderes Handy verbinden kann
-//                    (ZMK lehnt sonst jedes zweite Gerät ab), danach wieder normal
-//   beide Taster   = abbrechen, wieder normal
+// Beide Taster zugleich: kurz = Neustart in der App (beide Pfeile), 5 s halten = Bluetooth-Kopplung
+// löschen, damit sich ein anderes Handy verbinden kann (ZMK lehnt sonst jedes zweite Gerät ab).
+// Notfall-Update: direkt danach beide Taster nochmal 5 s halten = Update-Modus (vorher per USB an
+// den Rechner, dann erscheint das Laufwerk NICENANO, .uf2 draufziehen; ohne USB startet die Box
+// nach 3 s normal neu). Jeder andere Druck nach dem Entkoppeln zählt normal und beendet das.
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
@@ -24,7 +22,25 @@
         entkoppeln: entkoppeln {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&bt BT_CLR>, <&to 0>;
+            bindings = <&bt BT_CLR>, <&to 1>;
+        };
+
+        links_zurueck: links_zurueck {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0>, <&kp LEFT>;
+        };
+
+        rechts_zurueck: rechts_zurueck {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0>, <&kp RIGHT>;
+        };
+
+        beide_zurueck: beide_zurueck {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&to 0>, <&beide>;
         };
     };
 
@@ -33,8 +49,16 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <3000>;
-            bindings = <&to>, <&beide>;
+            tapping-term-ms = <5000>;
+            bindings = <&entkoppeln>, <&beide>;
+        };
+
+        update_lang: update_lang {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <5000>;
+            bindings = <&bootloader>, <&beide_zurueck>;
         };
     };
 
@@ -44,13 +68,13 @@
             key-positions = <0 1>;
             timeout-ms = <40>; // so lange wartet ein einzelner Druck auf den zweiten Taster
             layers = <0>;
-            bindings = <&beide_lang 1 0>;
+            bindings = <&beide_lang 0 0>;
         };
-        beide_wartung {
+        beide_nach_entkoppeln {
             key-positions = <0 1>;
             timeout-ms = <40>;
             layers = <1>;
-            bindings = <&to 0>;
+            bindings = <&update_lang 0 0>;
         };
     };
 
@@ -61,8 +85,8 @@
             bindings = <&kp LEFT &kp RIGHT>;
         };
 
-        wartung {
-            bindings = <&bootloader &entkoppeln>;
+        nach_entkoppeln {
+            bindings = <&links_zurueck &rechts_zurueck>;
         };
     };
 };
